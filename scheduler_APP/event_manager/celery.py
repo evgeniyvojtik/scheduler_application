@@ -9,7 +9,7 @@ import requests
 
 @shared_task()
 def remind_event():
-    all_events = Event.objects.filter(notification=False)
+    all_events = Event.objects.filter(notification=True)
     for every_event in all_events:
         if every_event.remind:
             timezone = tz = datetime.now() + timedelta(hours=3)

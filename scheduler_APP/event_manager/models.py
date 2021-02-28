@@ -11,10 +11,11 @@ class Country(models.Model):
 
 
 class MyUser(AbstractUser):
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True,
-                                blank=True, related_name='country_user',
-                                verbose_name='Страна'
-                                )
+    country = models.ForeignKey(
+        Country, on_delete=models.CASCADE, null=True,
+        blank=True, related_name='country_user',
+        verbose_name='Страна'
+    )
     USERNAME_FIELD = 'email'
     email = models.EmailField(unique=True, blank=False)
     REQUIRED_FIELDS = ['username']
@@ -25,35 +26,8 @@ class CountryHoliday(models.Model):
                                 blank=True, related_name='country_holiday',
                                 )
     holidays = models.TextField(null=True)
-    holiday_begin = models.DateField(null=True)
-    holiday_end = models.DateField(null=True)
-
-
-# class Event(models.Model):
-#     TYPE_REMIND = [
-#         ((timedelta(hours=1)), 'За час'),
-#         ((timedelta(hours=2)), 'За 2 часа'),
-#         ((timedelta(hours=4)), 'За 4 часа'),
-#         ((timedelta(days=1)), 'За день'),
-#         ((timedelta(weeks=1)), 'За неделю'),
-#     ]
-#     event = models.TextField(max_length=2000, verbose_name='Событие')
-#     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='user_event')
-#     date_event = models.DateField(null=True)
-#     time_start = models.TimeField(null=True)
-#     time_finish = models.TimeField(default='23:59:59', null=True)
-#     remind = models.CharField(max_length=30, choices=TYPE_REMIND, null=True, blank=True)
-#     time_remind = models.DateTimeField(null=True, blank=True)
-#     notification = models.BooleanField(default=False)
-#
-#     def __str__(self):
-#         return self.event
-#
-#     def save(self, **kwargs):
-#         if self.remind:
-#             datetime_event = datetime.datetime.combine(self.date_event, self.time_start)
-#             self.time_remind = datetime_event - self.remind
-#         super().save(**kwargs)
+    holiday_start = models.DateField(null=True)
+    holiday_finish = models.DateField(null=True)
 
 
 class Event(models.Model):
@@ -64,13 +38,13 @@ class Event(models.Model):
         ((timedelta(days=1)), 'За день'),
         ((timedelta(weeks=1)), 'За неделю'),
     ]
-    event = models.TextField(max_length=2000, verbose_name='Событие')
-    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='user_event')
+    event = models.TextField(max_length=2000, verbose_name='Событие', null=True)
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='user_event', null=True)
     date_time_start = models.DateTimeField(null=True)
     date_time_finish = models.DateTimeField(null=True, blank=True)
-    remind = models.CharField(max_length=30, choices=REMIND_OPTIONS, null=True, blank=True)
-    time_remind = models.DateTimeField(null=True, blank=True)
-    notification = models.BooleanField(default=False)
+    reminder_option = models.CharField(max_length=30, choices=REMIND_OPTIONS, null=True, blank=True)
+    reminder_time = models.DateTimeField(null=True, blank=True)
+    notification = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return self.event
@@ -78,7 +52,7 @@ class Event(models.Model):
     def save(self, **kwargs):
         if self.date_time_finish is None:
             self.date_time_finish = self.date_time_start
-        if self.remind:
-            self.time_remind = self.date_time_start - self.remind
+        if self.reminder_option:
+            self.reminder_time = self.date_time_start - self.reminder_option
 
         super().save(**kwargs)
