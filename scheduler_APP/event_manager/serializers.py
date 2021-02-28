@@ -7,7 +7,7 @@ from event_manager.models import Event, CountryHoliday
 class EventSerializer(ModelSerializer):
     class Meta:
         model = Event
-        fields = ('event', 'date_time_start', 'date_time_finish', 'remind',)
+        fields = ('event', 'date_time_start', 'date_time_finish', 'reminder_option',)
 
 
 class HolidaySerializer(ModelSerializer):

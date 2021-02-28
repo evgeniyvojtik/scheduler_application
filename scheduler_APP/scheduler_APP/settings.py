@@ -8,14 +8,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 import sys
+from datetime import timedelta
 from pathlib import Path
-import warnings
-from django.urls import path
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -25,13 +22,11 @@ SECRET_KEY = 'rtb*w^093ygy%(2n_px8r!ky!dh^evcub7*3s+_%kc@7n2q=k^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-#
-# ALLOWED_HOSTS = []
+
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['34.70.86.208', '127.0.0.1']
-
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
@@ -78,7 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'scheduler_APP.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -88,21 +82,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'event_db',
-#         'PASSWORD': 'useruser',
-#         'USER': 'evgeniy',
-#         'PORT': '5432',
-#         'HOST': '127.0.0.1'
-#     }
-# }
-
-if 'test' in sys.argv or 'test_coverage' in sys.argv: #Covers regular testing and django-coverage
-    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
-    DATABASES['default']['NAME'] = ':memory:'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -121,7 +100,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -143,17 +121,18 @@ CACHES = {
     }
 }
 
-#warnings.filterwarnings('error', r"DateTimeField .* received a naive datetime", RuntimeWarning, r'django\.db\.models\.fields')
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 AUTH_USER_MODEL = 'event_manager.MyUser'
 
-
+REMIND_OPTIONS = [
+    ((timedelta(hours=1)), 'За час'),
+    ((timedelta(hours=2)), 'За 2 часа'),
+    ((timedelta(hours=4)), 'За 4 часа'),
+    ((timedelta(days=1)), 'За день'),
+    ((timedelta(weeks=1)), 'За неделю'),
+]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST_USER = 'lanser03051996@gmail.com'
@@ -162,16 +141,16 @@ EMAIL_HOST_PASSWORD = '8637289zhenya'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-
-
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
+# REDIS_HOST = '0.0.0.0'
+# REDIS_PORT = '6379'
 
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT=['json']
-CELERY_TASK_SERIALIZER='json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE = {

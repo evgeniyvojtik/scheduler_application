@@ -26,7 +26,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="273478a4-fe2a-4461-a877-b1cd7fedeab5">
-        <schema name="main" object-types="column, index, table, dataset trigger, constraint, view" />
+        <schema name="main" object-types="view, table" />
       </connection>
     </loaded-nodes>
   </component>
@@ -39,10 +39,7 @@
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="273478a4-fe2a-4461-a877-b1cd7fedeab5" object-ref="schemas/main/tables/event_manager_country" />
-      <object connection-id="273478a4-fe2a-4461-a877-b1cd7fedeab5" object-ref="schemas/main/tables/event_manager_countryholiday" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="273478a4-fe2a-4461-a877-b1cd7fedeab5" />
